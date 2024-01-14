@@ -1,0 +1,70 @@
+Name: Название
+Article: Артикул
+Description: Описание
+Enabled: Активность
+Retail price: РРЦ
+Sale price: Оптовая цена
+Cost price: Себестоимость
+Length: Длина
+Width: Ширина
+Height: Высота
+Package size: Размер упаковки
+Quantity: Кол-во в наличии
+Quantity production: Кол-во в производстве
+Created at: Дата создания
+Updated at: Дата обновления
+Image: Картинка
+Category: Категория
+Techcard: Техкарта
+Available: Активен
+Disabled: Не активен
+In_battle: В бою
+On_check: На проверке
+Status: Статус
+Money Reward: Денежная награда
+Reward: Награда
+Sort: Сортировка
+Approve Type: Тип подтверждения
+Side: Сторона
+Game: Игра
+Dependence Quest: Квест для доступа
+Approve Target: Цель квеста
+Author: От кого квест
+Date: Дата
+Location: Локация
+Score: Счёт
+Deleted: Удален
+Started: В действии
+Ended: Завершен
+File: Файл
+Image File: Изображение
+Commander: Командир
+Side Reputations: Репутация торговцев
+Role: Роль
+Specialization: Специализация
+Character: Персонаж
+Item: Предмет
+Price: Цена
+Enable: Активность
+ItemCategory: Категория предметов
+ShelterModule: Модуль убежища
+Cost: Стоимость
+Seller: Продавец
+Expires: Истекает
+Created At: Создан
+Market: Лот
+Person Category Prices: Коэффициенты цен по категориям
+Item Category: Категория предметов
+Price Rate: Коэффициент
+Shelter Module Items: Предметы для постройки
+Count: Количество
+Quest Items: Предметы для квеста (необязательно)
+Lat: Широта
+Lon: Долгота
+Content: Контент
+MapPoint: точку на карте
+Clip Rect: Координаты спрайта
+Person: Персонаж
+Reputation: Репутация
+User: Пользователь
+Date End: Дата окончания
