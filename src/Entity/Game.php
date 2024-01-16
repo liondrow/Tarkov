@@ -11,7 +11,13 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: GameRepository::class)]
 class Game
 {
-    #[ORM\Id]
+
+	public function __toString(): string
+	{
+		return $this->getName();
+	}
+
+	#[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;

@@ -66,5 +66,6 @@ MapPoint: точку на карте
 Clip Rect: Координаты спрайта
 Person: Персонаж
 Reputation: Репутация
-User: Пользователь
+User: Команда
 Date End: Дата окончания
+Username: TeamId

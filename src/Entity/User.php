@@ -14,14 +14,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
 
 	public function __toString(): string
-	{
-		return "(" .$this->getUserIdentifier() . ") " . $this->getTeamName();
-	}
+                        	{
+                        		return "(" .$this->getUserIdentifier() . ") " . $this->getTeamName();
+                        	}
 
 	#[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+                            #[ORM\GeneratedValue]
+                            #[ORM\Column]
+                            private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
     private ?string $username = null;
@@ -47,9 +47,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Game::class, inversedBy: 'users')]
     private Collection $game;
 
+    #[ORM\OneToMany(mappedBy: 'team', targetEntity: Wallet::class, orphanRemoval: true)]
+    private Collection $wallets;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $enabled = null;
+
     public function __construct()
     {
         $this->game = new ArrayCollection();
+        $this->wallets = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -178,6 +185,48 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeGame(Game $game): static
     {
         $this->game->removeElement($game);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Wallet>
+     */
+    public function getWallets(): Collection
+    {
+        return $this->wallets;
+    }
+
+    public function addWallet(Wallet $wallet): static
+    {
+        if (!$this->wallets->contains($wallet)) {
+            $this->wallets->add($wallet);
+            $wallet->setTeam($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWallet(Wallet $wallet): static
+    {
+        if ($this->wallets->removeElement($wallet)) {
+            // set the owning side to null (unless already changed)
+            if ($wallet->getTeam() === $this) {
+                $wallet->setTeam(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function isEnabled(): ?bool
+    {
+        return $this->enabled;
+    }
+
+    public function setEnabled(?bool $enabled): static
+    {
+        $this->enabled = $enabled;
 
         return $this;
     }

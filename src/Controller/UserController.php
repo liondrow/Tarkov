@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
@@ -12,9 +11,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class UserController extends AbstractController
 {
     #[Route('/user-data', name: 'app_user')]
-    public function index(EntityManagerInterface $entityManager): JsonResponse
+    public function index(): JsonResponse
     {
-		$users = $entityManager->getRepository(User::class)->findOneBy(['username'=>'liondrow']);
-        return new JsonResponse(['id' => $users->getUserIdentifier()]);
+		/** @var User $user */
+		$user = $this->getUser();
+		$userData['teamName'] = $user->getTeamName();
+		$userData['uid'] = $user->getUserIdentifier();
+        return new JsonResponse($userData);
     }
 }

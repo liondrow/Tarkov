@@ -47,7 +47,6 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 	{
 		$entityManager = $this->getEntityManager();
 		$resTeams = [];
-		$game = $entityManager->getRepository(Game::class)->findOneBy(['enabled' => true]);
 		$teams = $entityManager->getRepository(Game::class)->findOneBy(['enabled' => true])->getUsers()->toArray();
 		if(!empty($teams)) {
 			foreach($teams as $team) {
@@ -59,7 +58,8 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 			'SELECT u
                 FROM App\Entity\User u
                 WHERE u.username = :username
-                AND u IN (:teams)'
+                AND u IN (:teams) 
+                AND u.enabled = 1'
 		)
 			->setParameter('username', $username)
 			->setParameter('teams', $resTeams)
