@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Game;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -20,6 +21,22 @@ class GameRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Game::class);
     }
+
+	/**
+	 * @throws NonUniqueResultException
+	 */
+	public function getActiveGame(): ?Game
+	{
+		return $this->createQueryBuilder('g')
+			->andWhere('g.enabled = :val')
+			->setParameter('val', true)
+			->orderBy('g.id', 'ASC')
+			->getQuery()
+			->getOneOrNullResult()
+			;
+	}
+
+
 
 //    /**
 //     * @return Game[] Returns an array of Game objects

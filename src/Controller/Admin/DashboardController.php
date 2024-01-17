@@ -3,6 +3,9 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Game;
+use App\Entity\Quest;
+use App\Entity\QuestBranch;
+use App\Entity\QuestProgress;
 use App\Entity\User;
 use App\Entity\Wallet;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
@@ -32,9 +35,11 @@ class DashboardController extends AbstractDashboardController
 
     public function configureMenuItems(): iterable
     {
-        yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
         yield MenuItem::linkToCrud('Команды', 'fas fa-user', User::class);
         yield MenuItem::linkToCrud('Игры', 'fas fa-list', Game::class);
         yield MenuItem::linkToCrud('Кошельки', 'fas fa-list', Wallet::class);
+        yield MenuItem::linkToCrud('Квесты', 'fas fa-list', Quest::class);
+        yield MenuItem::linkToCrud('Ветки квестов', 'fas fa-list', QuestBranch::class);
+        yield MenuItem::linkToCrud('Распределенные квесты', 'fas fa-list', QuestProgress::class);
     }
 }

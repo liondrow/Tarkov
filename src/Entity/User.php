@@ -14,14 +14,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
 
 	public function __toString(): string
-                        	{
-                        		return "(" .$this->getUserIdentifier() . ") " . $this->getTeamName();
-                        	}
+                                                                  	{
+                                                                  		return "(" .$this->getUserIdentifier() . ") " . $this->getTeamName();
+                                                                  	}
 
 	#[ORM\Id]
-                            #[ORM\GeneratedValue]
-                            #[ORM\Column]
-                            private ?int $id = null;
+                                                                      #[ORM\GeneratedValue]
+                                                                      #[ORM\Column]
+                                                                      private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
     private ?string $username = null;
@@ -53,10 +53,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(nullable: true)]
     private ?bool $enabled = null;
 
+    #[ORM\OneToMany(mappedBy: 'team', targetEntity: QuestProgress::class, orphanRemoval: true)]
+    private Collection $questProgress;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $seller = null;
+
+    #[ORM\ManyToOne]
+    private ?QuestBranch $questBranch = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $side = null;
+
     public function __construct()
     {
         $this->game = new ArrayCollection();
         $this->wallets = new ArrayCollection();
+        $this->questProgress = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -227,6 +240,72 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setEnabled(?bool $enabled): static
     {
         $this->enabled = $enabled;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, QuestProgress>
+     */
+    public function getQuestProgress(): Collection
+    {
+        return $this->questProgress;
+    }
+
+    public function addQuestProgress(QuestProgress $questProgress): static
+    {
+        if (!$this->questProgress->contains($questProgress)) {
+            $this->questProgress->add($questProgress);
+            $questProgress->setTeam($this);
+        }
+
+        return $this;
+    }
+
+    public function removeQuestProgress(QuestProgress $questProgress): static
+    {
+        if ($this->questProgress->removeElement($questProgress)) {
+            // set the owning side to null (unless already changed)
+            if ($questProgress->getTeam() === $this) {
+                $questProgress->setTeam(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function isSeller(): ?bool
+    {
+        return $this->seller;
+    }
+
+    public function setSeller(?bool $seller): static
+    {
+        $this->seller = $seller;
+
+        return $this;
+    }
+
+    public function getQuestBranch(): ?QuestBranch
+    {
+        return $this->questBranch;
+    }
+
+    public function setQuestBranch(?QuestBranch $questBranch): static
+    {
+        $this->questBranch = $questBranch;
+
+        return $this;
+    }
+
+    public function getSide(): ?string
+    {
+        return $this->side;
+    }
+
+    public function setSide(?string $side): static
+    {
+        $this->side = $side;
 
         return $this;
     }

@@ -37,7 +37,7 @@ class WalletService
 			foreach ($outgoingInvoices as $outgoingInvoice)
 			{
 				$resHistory[$outgoingInvoice->getId()] = new InvoiceHistoryDto(
-					$outgoingInvoice->getTeamFrom()->getUserIdentifier(),
+					$outgoingInvoice->getTeamTo()->getUserIdentifier(),
 					$outgoingInvoice->getTeamTo()->getTeamName(),
 					$outgoingInvoice->getSum(),
 					self::TYPE_OUTGOING

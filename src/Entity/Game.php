@@ -13,14 +13,14 @@ class Game
 {
 
 	public function __toString(): string
-	{
-		return $this->getName();
-	}
+               	{
+               		return $this->getName();
+               	}
 
 	#[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+                   #[ORM\GeneratedValue]
+                   #[ORM\Column]
+                   private ?int $id = null;
 
     #[ORM\Column(length: 255)]
     private ?string $name = null;
@@ -52,9 +52,13 @@ class Game
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $polygon = null;
 
+    #[ORM\OneToMany(mappedBy: 'game', targetEntity: QuestBranch::class, orphanRemoval: true)]
+    private Collection $questBranches;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
+        $this->questBranches = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -193,6 +197,36 @@ class Game
     public function setPolygon(?string $polygon): static
     {
         $this->polygon = $polygon;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, QuestBranch>
+     */
+    public function getQuestBranches(): Collection
+    {
+        return $this->questBranches;
+    }
+
+    public function addQuestBranch(QuestBranch $questBranch): static
+    {
+        if (!$this->questBranches->contains($questBranch)) {
+            $this->questBranches->add($questBranch);
+            $questBranch->setGame($this);
+        }
+
+        return $this;
+    }
+
+    public function removeQuestBranch(QuestBranch $questBranch): static
+    {
+        if ($this->questBranches->removeElement($questBranch)) {
+            // set the owning side to null (unless already changed)
+            if ($questBranch->getGame() === $this) {
+                $questBranch->setGame(null);
+            }
+        }
 
         return $this;
     }

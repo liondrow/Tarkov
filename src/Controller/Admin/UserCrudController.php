@@ -9,7 +9,9 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\KeyValueStore;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
@@ -54,8 +56,11 @@ class UserCrudController extends AbstractCrudController
 		$fields[] = $password;
 
 		$fields[] = TextField::new('teamName');
+		$fields[] = ChoiceField::new('side')->setChoices(["BEAR" => "BEAR", "USEC" => "USEC", "WILD" => "WILD"]);
 		$fields[] = TextField::new('airsoftTeam');
 		$fields[] = DateField::new('createdAt');
+		$fields[] = BooleanField::new('seller')->hideOnIndex();
+		$fields[] = AssociationField::new('questBranch')->hideOnIndex();
 
 		return $fields;
 	}
