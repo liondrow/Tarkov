@@ -61,6 +61,7 @@ class UserCrudController extends AbstractCrudController
 		$fields[] = DateField::new('createdAt');
 		$fields[] = BooleanField::new('seller')->hideOnIndex();
 		$fields[] = AssociationField::new('questBranch')->hideOnIndex();
+		$fields[] = BooleanField::new('isAuctioner')->hideOnIndex();
 
 		return $fields;
 	}

@@ -14,14 +14,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
 
 	public function __toString(): string
-                                                                  	{
-                                                                  		return "(" .$this->getUserIdentifier() . ") " . $this->getTeamName();
-                                                                  	}
+                                                                           	{
+                                                                           		return "(" .$this->getUserIdentifier() . ") " . $this->getTeamName();
+                                                                           	}
 
 	#[ORM\Id]
-                                                                      #[ORM\GeneratedValue]
-                                                                      #[ORM\Column]
-                                                                      private ?int $id = null;
+                                                                               #[ORM\GeneratedValue]
+                                                                               #[ORM\Column]
+                                                                               private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
     private ?string $username = null;
@@ -64,6 +64,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $side = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $isAuctioner = null;
 
     public function __construct()
     {
@@ -306,6 +309,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setSide(?string $side): static
     {
         $this->side = $side;
+
+        return $this;
+    }
+
+    public function isIsAuctioner(): ?bool
+    {
+        return $this->isAuctioner;
+    }
+
+    public function setIsAuctioner(?bool $isAuctioner): static
+    {
+        $this->isAuctioner = $isAuctioner;
 
         return $this;
     }

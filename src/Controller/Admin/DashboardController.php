@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Game;
+use App\Entity\MarketItem;
 use App\Entity\Quest;
 use App\Entity\QuestBranch;
 use App\Entity\QuestProgress;
@@ -38,6 +39,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Команды', 'fas fa-user', User::class);
         yield MenuItem::linkToCrud('Игры', 'fas fa-list', Game::class);
         yield MenuItem::linkToCrud('Кошельки', 'fas fa-list', Wallet::class);
+        yield MenuItem::linkToCrud('Барахолка', 'fas fa-list', MarketItem::class);
         yield MenuItem::linkToCrud('Квесты', 'fas fa-list', Quest::class);
         yield MenuItem::linkToCrud('Ветки квестов', 'fas fa-list', QuestBranch::class);
         yield MenuItem::linkToCrud('Распределенные квесты', 'fas fa-list', QuestProgress::class);

@@ -13,14 +13,14 @@ class Game
 {
 
 	public function __toString(): string
-               	{
-               		return $this->getName();
-               	}
+                              	{
+                              		return $this->getName();
+                              	}
 
 	#[ORM\Id]
-                   #[ORM\GeneratedValue]
-                   #[ORM\Column]
-                   private ?int $id = null;
+                                  #[ORM\GeneratedValue]
+                                  #[ORM\Column]
+                                  private ?int $id = null;
 
     #[ORM\Column(length: 255)]
     private ?string $name = null;
@@ -55,10 +55,14 @@ class Game
     #[ORM\OneToMany(mappedBy: 'game', targetEntity: QuestBranch::class, orphanRemoval: true)]
     private Collection $questBranches;
 
+    #[ORM\OneToMany(mappedBy: 'game', targetEntity: MarketItem::class)]
+    private Collection $marketItems;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
         $this->questBranches = new ArrayCollection();
+        $this->marketItems = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -225,6 +229,36 @@ class Game
             // set the owning side to null (unless already changed)
             if ($questBranch->getGame() === $this) {
                 $questBranch->setGame(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, MarketItem>
+     */
+    public function getMarketItems(): Collection
+    {
+        return $this->marketItems;
+    }
+
+    public function addMarketItem(MarketItem $marketItem): static
+    {
+        if (!$this->marketItems->contains($marketItem)) {
+            $this->marketItems->add($marketItem);
+            $marketItem->setGame($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMarketItem(MarketItem $marketItem): static
+    {
+        if ($this->marketItems->removeElement($marketItem)) {
+            // set the owning side to null (unless already changed)
+            if ($marketItem->getGame() === $this) {
+                $marketItem->setGame(null);
             }
         }
 
