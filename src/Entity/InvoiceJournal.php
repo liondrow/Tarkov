@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enum\InvoiceType;
 use App\Repository\InvoiceJournalRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -34,6 +35,9 @@ class InvoiceJournal
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createAt = null;
+
+    #[ORM\Column(length: 255, nullable: true, enumType: InvoiceType::class)]
+    private ?InvoiceType $type = null;
 
     public function getId(): ?int
     {
@@ -111,4 +115,14 @@ class InvoiceJournal
 
         return $this;
     }
+
+	public function getType(): ?InvoiceType
+	{
+		return $this->type;
+	}
+
+	public function setType(?InvoiceType $type): void
+	{
+		$this->type = $type;
+	}
 }

@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Entity\Wallet;
 use App\Exception\BadUserException;
 use App\Exception\GameNotFoundException;
+use App\Exception\InvalidInvoiceDataException;
 use App\Exception\InvalidWalletSumException;
 use App\Exception\NotFoundException;
 use App\Service\GameService;
@@ -21,12 +22,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class WalletController extends AbstractController
 {
 
-	public function __construct(
-		private readonly GameService $gameService,
-		private readonly WalletService $walletService
-	)
-	{
-	}
+	public function __construct(private readonly GameService $gameService, private readonly WalletService $walletService) {}
 
 	/**
 	 * @throws GameNotFoundException
@@ -39,7 +35,7 @@ class WalletController extends AbstractController
 		$teamTo = $data['teamTo'];
 		$sum = $data['sum'];
 		if(empty($teamTo) || empty($sum)) {
-			throw new BadRequestException("Не заполнены обязательные поля");
+			throw new InvalidInvoiceDataException("Не заполнены обязательные поля");
 		}
 		/** @var User $user */
 		$user = $this->getUser();

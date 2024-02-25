@@ -13,14 +13,14 @@ class Game
 {
 
 	public function __toString(): string
-                              	{
-                              		return $this->getName();
-                              	}
+                                             	{
+                                             		return $this->getName();
+                                             	}
 
 	#[ORM\Id]
-                                  #[ORM\GeneratedValue]
-                                  #[ORM\Column]
-                                  private ?int $id = null;
+                                                 #[ORM\GeneratedValue]
+                                                 #[ORM\Column]
+                                                 private ?int $id = null;
 
     #[ORM\Column(length: 255)]
     private ?string $name = null;
@@ -58,11 +58,15 @@ class Game
     #[ORM\OneToMany(mappedBy: 'game', targetEntity: MarketItem::class)]
     private Collection $marketItems;
 
+    #[ORM\OneToMany(mappedBy: 'game', targetEntity: Shelter::class, orphanRemoval: true)]
+    private Collection $shelters;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
         $this->questBranches = new ArrayCollection();
         $this->marketItems = new ArrayCollection();
+        $this->shelters = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -259,6 +263,36 @@ class Game
             // set the owning side to null (unless already changed)
             if ($marketItem->getGame() === $this) {
                 $marketItem->setGame(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Shelter>
+     */
+    public function getShelters(): Collection
+    {
+        return $this->shelters;
+    }
+
+    public function addShelter(Shelter $shelter): static
+    {
+        if (!$this->shelters->contains($shelter)) {
+            $this->shelters->add($shelter);
+            $shelter->setGame($this);
+        }
+
+        return $this;
+    }
+
+    public function removeShelter(Shelter $shelter): static
+    {
+        if ($this->shelters->removeElement($shelter)) {
+            // set the owning side to null (unless already changed)
+            if ($shelter->getGame() === $this) {
+                $shelter->setGame(null);
             }
         }
 

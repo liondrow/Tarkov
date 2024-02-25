@@ -9,7 +9,7 @@
 
 namespace App\Exception;
 
-class BadUserException extends \Exception
+class BadUserException extends GameException
 {
 
 }

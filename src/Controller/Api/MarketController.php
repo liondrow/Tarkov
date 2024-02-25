@@ -2,15 +2,16 @@
 
 namespace App\Controller\Api;
 
-use App\Entity\MarketInvoice;
 use App\Entity\MarketItem;
 use App\Entity\User;
-use App\Entity\Wallet;
+use App\Exception\GameException;
 use App\Exception\GameNotFoundException;
 use App\Exception\NotFoundException;
 use App\Model\LotDto;
 use App\Service\GameService;
+use App\Service\MarketService;
 use Doctrine\ORM\EntityManagerInterface;
+use PHPUnit\Util\Json;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,7 +23,8 @@ class MarketController extends AbstractController
 
 	public function __construct(
 		private readonly GameService $gameService,
-		private readonly EntityManagerInterface $entityManager
+		private readonly EntityManagerInterface $entityManager,
+		private readonly MarketService $marketService
 	)
 	{
 	}
@@ -47,41 +49,20 @@ class MarketController extends AbstractController
 	/**
 	 * @throws GameNotFoundException
 	 * @throws NotFoundException
+	 * @throws GameException
 	 */
 	#[Route('/market_buy', name: 'app_market_order')]
 	public function orderLot(Request $request): JsonResponse
 	{
+		$response = new JsonResponse();
 		$data = json_decode($request->getContent(), true);
 		$activeGame = $this->gameService->getCurrentGame();
-		$lot = $this->entityManager->getRepository(MarketItem::class)->findOneBy(['game' => $activeGame, 'id' => $data['lotId'], 'enabled' => true]);
-		if(!$lot) {
-			throw new NotFoundException("Лот не найден");
-		}
+		/** @var User $user */
+		$user = $this->getUser();
+		$result = $this->marketService->makeOrder($activeGame, $data['lotId'], $user);
+		$response->setData($result);
 
-		try
-		{
-			$marketInvoice = new MarketInvoice();
-			$marketInvoice->setDate(new \DateTime());
-			$marketInvoice->setBuyer($this->getUser());
-			$marketInvoice->setLot($lot);
-			$this->entityManager->persist($marketInvoice);
+		return new JsonResponse($result);
 
-			$buyerWallet = $this->entityManager->getRepository(Wallet::class)->findOneBy(['game' => $activeGame, 'team' => $this->getUser()]);
-			$newBuyerWallet = $buyerWallet->getValue() - $lot->getPrice();
-			$buyerWallet->setValue($newBuyerWallet);
-			$this->entityManager->persist($buyerWallet);
-
-			$sellerWallet = $this->entityManager->getRepository(Wallet::class)->findOneBy(['game' => $activeGame, 'team' => $lot->getSeller()]);
-			$sellerWallet->setValue($sellerWallet->getValue()+$lot->getPrice());
-			$this->entityManager->persist($sellerWallet);
-
-			$lot->setEnabled(false);
-			$this->entityManager->persist($lot);
-
-			$this->entityManager->flush();
-			return new JsonResponse(['status' => "OK", 'buyerWallet' => $newBuyerWallet]);
-		} catch (\Exception) {
-			throw new \Exception("Возникла ошибка при покупке, попробуйте еще раз или обратитесь к организатору");
-		}
 	}
 }

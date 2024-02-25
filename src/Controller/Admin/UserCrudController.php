@@ -59,8 +59,9 @@ class UserCrudController extends AbstractCrudController
 		$fields[] = ChoiceField::new('side')->setChoices(["BEAR" => "BEAR", "USEC" => "USEC", "WILD" => "WILD"]);
 		$fields[] = TextField::new('airsoftTeam');
 		$fields[] = DateField::new('createdAt');
-		$fields[] = BooleanField::new('seller')->hideOnIndex();
 		$fields[] = AssociationField::new('questBranch')->hideOnIndex();
+		$fields[] = BooleanField::new('isPmc')->hideOnIndex();
+		$fields[] = BooleanField::new('seller')->hideOnIndex();
 		$fields[] = BooleanField::new('isAuctioner')->hideOnIndex();
 
 		return $fields;

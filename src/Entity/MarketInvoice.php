@@ -25,6 +25,9 @@ class MarketInvoice
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $date = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $delivered = false;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -62,6 +65,18 @@ class MarketInvoice
     public function setDate(\DateTimeInterface $date): static
     {
         $this->date = $date;
+
+        return $this;
+    }
+
+    public function isDelivered(): ?bool
+    {
+        return $this->delivered;
+    }
+
+    public function setDelivered(?bool $delivered): static
+    {
+        $this->delivered = $delivered;
 
         return $this;
     }

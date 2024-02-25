@@ -14,14 +14,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
 
 	public function __toString(): string
-                                                                           	{
-                                                                           		return "(" .$this->getUserIdentifier() . ") " . $this->getTeamName();
-                                                                           	}
+                                                                                                   	{
+                                                                                                   		return "(" .$this->getUserIdentifier() . ") " . $this->getTeamName();
+                                                                                                   	}
 
 	#[ORM\Id]
-                                                                               #[ORM\GeneratedValue]
-                                                                               #[ORM\Column]
-                                                                               private ?int $id = null;
+                                                                                                       #[ORM\GeneratedValue]
+                                                                                                       #[ORM\Column]
+                                                                                                       private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
     private ?string $username = null;
@@ -68,11 +68,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(nullable: true)]
     private ?bool $isAuctioner = null;
 
+    #[ORM\OneToMany(mappedBy: 'team', targetEntity: TeamShelter::class, orphanRemoval: true)]
+    private Collection $teamShelters;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $isPmc = null;
+
     public function __construct()
     {
         $this->game = new ArrayCollection();
         $this->wallets = new ArrayCollection();
         $this->questProgress = new ArrayCollection();
+        $this->teamShelters = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -321,6 +328,48 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsAuctioner(?bool $isAuctioner): static
     {
         $this->isAuctioner = $isAuctioner;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TeamShelter>
+     */
+    public function getTeamShelters(): Collection
+    {
+        return $this->teamShelters;
+    }
+
+    public function addTeamShelter(TeamShelter $teamShelter): static
+    {
+        if (!$this->teamShelters->contains($teamShelter)) {
+            $this->teamShelters->add($teamShelter);
+            $teamShelter->setTeam($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTeamShelter(TeamShelter $teamShelter): static
+    {
+        if ($this->teamShelters->removeElement($teamShelter)) {
+            // set the owning side to null (unless already changed)
+            if ($teamShelter->getTeam() === $this) {
+                $teamShelter->setTeam(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function isIsPmc(): ?bool
+    {
+        return $this->isPmc;
+    }
+
+    public function setIsPmc(?bool $isPmc): static
+    {
+        $this->isPmc = $isPmc;
 
         return $this;
     }

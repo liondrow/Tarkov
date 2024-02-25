@@ -65,6 +65,7 @@ class WalletService
 	/**
 	 * @throws InvalidWalletSumException
 	 * @throws NotFoundException
+	 * @throws \Exception
 	 */
 	public function sendInvoice(
 		Game $game,
@@ -82,28 +83,37 @@ class WalletService
 			throw new NotFoundException("Ошибка! Кошелек не активен.");
 		}
 
-		$userTo = $this->entityManager->getRepository(User::class)->findOneBy(['username' => $userToId]);
-		if(empty($userTo)) {
-			throw new NotFoundException("Команда получателя не найдена");
+		$this->entityManager->beginTransaction();
+		try
+		{
+			$userTo = $this->entityManager->getRepository(User::class)->findOneBy(['username' => $userToId]);
+			if(empty($userTo)) {
+				throw new NotFoundException("Команда получателя не найдена");
+			}
+			$userToWallet = $userTo->getWallets()->filter(function (Wallet $wallet) use ($game) {
+				return $wallet->getGame() === $game;
+			})->toArray();
+			/** @var ?Wallet $resUserToWallet */
+			$resUserToWallet = (!empty($userToWallet) && is_array($userToWallet)) ? current($userToWallet) : $userToWallet;
+
+			if($resWallet->getValue() < $sum) {
+				throw new InvalidWalletSumException("Недостаточно средств для перевода");
+			}
+
+			$resUserToWallet->setValue((float)$resUserToWallet->getValue() + $sum);
+			$resWallet->setValue((float)$resWallet->getValue() - $sum);
+
+			$this->saveInvoiceToJournal($game, $userFrom, $userTo, $sum);
+
+			$this->entityManager->persist($resUserToWallet);
+			$this->entityManager->persist($resWallet);
+			$this->entityManager->flush();
+			$this->entityManager->commit();
+		} catch (\Exception $exception) {
+			$this->entityManager->rollback();
+			throw new \Exception($exception->getMessage());
 		}
-		$userToWallet = $userTo->getWallets()->filter(function (Wallet $wallet) use ($game) {
-			return $wallet->getGame() === $game;
-		})->toArray();
-		/** @var ?Wallet $resUserToWallet */
-		$resUserToWallet = (!empty($userToWallet) && is_array($userToWallet)) ? current($userToWallet) : $userToWallet;
 
-		if($resWallet->getValue() < $sum) {
-			throw new InvalidWalletSumException("Недостаточно средств для перевода");
-		}
-
-		$resUserToWallet->setValue((float)$resUserToWallet->getValue() + $sum);
-		$resWallet->setValue((float)$resWallet->getValue() - $sum);
-
-		$this->saveInvoiceToJournal($game, $userFrom, $userTo, $sum);
-
-		$this->entityManager->persist($resUserToWallet);
-		$this->entityManager->persist($resWallet);
-		$this->entityManager->flush();
 		return $resWallet->getValue();
 	}
 

@@ -9,7 +9,7 @@
 
 namespace App\Exception;
 
-class InvalidWalletSumException extends \Exception
+class InvalidWalletSumException extends GameException
 {
 
 }

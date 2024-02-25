@@ -9,7 +9,7 @@
 
 namespace App\Exception;
 
-class GameNotFoundException extends GameException
+class InvalidInvoiceDataException extends GameException
 {
 
 }
