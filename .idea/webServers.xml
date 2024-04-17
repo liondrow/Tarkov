@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="6ff2d307-efda-46ff-8679-7b4fe66c9117" name="tarkov timeweb">
+        <fileTransfer accessType="SFTP" host="213.171.5.123" port="22" sshConfigId="6f806c80-42fa-46ec-9eba-486876a93c00" sshConfig="root@213.171.5.123:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

@@ -2,7 +2,10 @@
 
 namespace App\Repository;
 
+use App\Entity\Quest;
+use App\Entity\QuestBranch;
 use App\Entity\QuestProgress;
+use App\Enum\QuestStatus;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -25,6 +28,20 @@ class QuestProgressRepository extends ServiceEntityRepository
 	{
 		$this->createQueryBuilder('q')
 			->delete()
+			->getQuery()
+			->getResult();
+	}
+
+	public function findQuestProgressByBranchAndParentQuest(int $parentQuest, int $teamId)
+	{
+		return $this->createQueryBuilder('qp')
+			->join('qp.quest', 'q')
+			->where('q.parent = :parent')
+			->andWhere('qp.team = :team')
+			->andWhere('qp.status = :status')
+			->setParameter('parent', $parentQuest)
+			->setParameter('team', $teamId)
+			->setParameter('status', QuestStatus::QUEUE)
 			->getQuery()
 			->getResult();
 	}
