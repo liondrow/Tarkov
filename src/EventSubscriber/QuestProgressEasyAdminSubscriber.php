@@ -4,6 +4,8 @@ namespace App\EventSubscriber;
 
 use App\Entity\QuestProgress;
 use App\Enum\QuestStatus;
+use App\Service\GameService;
+use App\Service\WalletService;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Event\BeforeEntityUpdatedEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -11,7 +13,11 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class QuestProgressEasyAdminSubscriber implements EventSubscriberInterface
 {
 
-	public function __construct(private EntityManagerInterface $entityManager)
+	public function __construct(
+		private EntityManagerInterface $entityManager,
+		private WalletService $walletService,
+		private GameService $gameService
+		)
 	{
 	}
 
@@ -38,6 +44,18 @@ class QuestProgressEasyAdminSubscriber implements EventSubscriberInterface
 					$this->entityManager->persist($childQuest);
 				}
 			}
+			/*$sum = $entity->getQuest()->getReward();
+			if($sum > 0) {
+				$userTo = $entity->getTeam()->getUserIdentifier();
+				$userFrom = $entity->getQuest()->getTarget();
+				$game = $this->gameService->getCurrentGame();
+				try
+				{
+					$this->walletService->sendInvoice($game, $userFrom, $userTo, $sum);
+				} catch (\Exception $exception) {
+					throw new \Exception("Возникла ошибка при зачислении награды за квест к счету");
+				}
+			}*/
 		}
 	}
 
