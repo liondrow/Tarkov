@@ -59,7 +59,7 @@ class AddQuestsForCommandsCommand extends Command
 			$questProgress = new QuestProgress();
 			$questProgress->setQuest($quest);
 			$questProgress->setTeam($team);
-			$status = ($distributedQuestCount === 0) ? QuestStatus::ACTIVE : QuestStatus::QUEUE;
+			$status = ($distributedQuestCount === 0 || empty($quest->getParent())) ? QuestStatus::ACTIVE : QuestStatus::QUEUE;
 			$questProgress->setStatus($status);
 			$questProgress->setEnabled(true);
 			$this->entityManager->persist($questProgress);
