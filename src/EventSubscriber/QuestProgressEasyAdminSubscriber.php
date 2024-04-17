@@ -44,6 +44,7 @@ class QuestProgressEasyAdminSubscriber implements EventSubscriberInterface
 					$this->entityManager->persist($childQuest);
 				}
 			}
+			/** Автоматическая выдача награды за квест */
 			/*$sum = $entity->getQuest()->getReward();
 			if($sum > 0) {
 				$userTo = $entity->getTeam()->getUserIdentifier();
