@@ -34,36 +34,14 @@ class TeamShelterRepository extends ServiceEntityRepository
 	public function getSheltersListByTeamAndGame(Game $game, User $team)
 	{
 		return $this->createQueryBuilder('t')
+			->join('t.shelter', 's')
 			->andWhere('t.game = :game')
 			->andWhere('t.team = :team')
+			->andWhere('s.enabled = :enabled')
 			->setParameter('game', $game)
 			->setParameter('team', $team)
+			->setParameter('enabled', true)
 			->getQuery()
 			->getResult();
 	}
-
-//    /**
-//     * @return TeamShelter[] Returns an array of TeamShelter objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('t')
-//            ->andWhere('t.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('t.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?TeamShelter
-//    {
-//        return $this->createQueryBuilder('t')
-//            ->andWhere('t.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
 }
