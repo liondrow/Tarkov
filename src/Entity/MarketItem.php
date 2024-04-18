@@ -27,7 +27,7 @@ class MarketItem
     private ?float $price = null;
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?User $seller = null;
 
     #[ORM\Column(nullable: true)]
