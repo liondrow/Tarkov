@@ -112,7 +112,7 @@ class WalletService
 			$this->entityManager->commit();
 		} catch (\Exception $exception) {
 			$this->entityManager->rollback();
-			throw new \Exception($exception->getMessage());
+			throw new InvalidInvoiceDataException($exception->getMessage());
 		}
 
 		return $resWallet->getValue();
