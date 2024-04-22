@@ -54,7 +54,7 @@ class MarketService
 		{
 			$buyerWallet = $this->entityManager->getRepository(Wallet::class)->findOneBy(['game' => $game, 'team' => $user]);
 			if($buyerWallet->getValue() < $lot->getPrice()) {
-				throw new GameException("Недостаточно средств на счету");
+				throw new GameException("Недостаточно средств на счете");
 			}
 			$newBuyerWallet = $buyerWallet->getValue() - $lot->getPrice();
 			$buyerWallet->setValue($newBuyerWallet);
@@ -82,6 +82,9 @@ class MarketService
 			$result->setSuccess(true);
 			$result->setBuyerWalletValue($newBuyerWallet);
 			return $result;
+		} catch (GameException $gameException) {
+			$this->entityManager->rollback();
+			throw new Exception($gameException->getMessage());
 		} catch (Exception $exception) {
 			$this->entityManager->rollback();
 			throw new Exception("Возникла ошибка при покупке, попробуйте еще раз или обратитесь к организатору");
