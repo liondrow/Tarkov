@@ -13,6 +13,7 @@ use App\Entity\Game;
 use App\Entity\InvoiceJournal;
 use App\Entity\User;
 use App\Entity\Wallet;
+use App\Exception\InvalidInvoiceDataException;
 use App\Exception\InvalidWalletSumException;
 use App\Exception\NotFoundException;
 use App\Model\InvoiceHistoryDto;
@@ -80,7 +81,7 @@ class WalletService
 		/** @var ?Wallet $resWallet */
 		$resWallet = (!empty($wallet) && is_array($wallet)) ? current($wallet) : $wallet;
 		if(empty($resWallet)) {
-			throw new NotFoundException("Ошибка! Кошелек не активен.");
+            throw new InvalidInvoiceDataException("Ошибка! Кошелек не активен.");
 		}
 
 		$this->entityManager->beginTransaction();
@@ -88,8 +89,8 @@ class WalletService
 		{
 			$userTo = $this->entityManager->getRepository(User::class)->findOneBy(['username' => $userToId]);
 			if(empty($userTo)) {
-				throw new NotFoundException("Команда получателя не найдена");
-			}
+                throw new InvalidInvoiceDataException("Команда получателя не найдена");
+            }
 			$userToWallet = $userTo->getWallets()->filter(function (Wallet $wallet) use ($game) {
 				return $wallet->getGame() === $game;
 			})->toArray();
@@ -97,7 +98,7 @@ class WalletService
 			$resUserToWallet = (!empty($userToWallet) && is_array($userToWallet)) ? current($userToWallet) : $userToWallet;
 
 			if($resWallet->getValue() < $sum) {
-				throw new InvalidWalletSumException("Недостаточно средств для перевода");
+                throw new InvalidInvoiceDataException("Недостаточно средств для перевода");
 			}
 
 			$resUserToWallet->setValue((float)$resUserToWallet->getValue() + $sum);
@@ -111,7 +112,7 @@ class WalletService
 			$this->entityManager->commit();
 		} catch (\Exception $exception) {
 			$this->entityManager->rollback();
-			throw new \Exception($exception->getMessage());
+			throw new InvalidInvoiceDataException($exception->getMessage());
 		}
 
 		return $resWallet->getValue();
