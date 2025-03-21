@@ -57,7 +57,7 @@ class QuestCrudController extends AbstractCrudController
 				return $queryBuilder->andWhere('entity.seller = :seller')->setParameter('seller', true);
 			}),
 			AssociationField::new('branch')->setQueryBuilder(function(QueryBuilder $queryBuilder) {
-				return $queryBuilder->andWhere('entity.game = :enabled')->setParameter('enabled', true);
+				return $queryBuilder->andWhere('entity.enabled = :enabled')->setParameter('enabled', true);
 			}),
 			AssociationField::new('parent')
 		];

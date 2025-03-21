@@ -17,7 +17,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
     name: 'app:distribute-quests',
     description: 'Начальное распределение квестов по командам, с учетом указанных веток',
 )]
-class AddQuestsForCommandsCommand extends Command
+class AddQuestsForUsersCommand extends Command
 {
     public function __construct(private readonly EntityManagerInterface $entityManager)
     {

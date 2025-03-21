@@ -36,9 +36,9 @@ class DashboardController extends AbstractDashboardController
 			->setTitle('Панель администратора')
 			->setTranslationDomain('messages');
 	}
-
     public function configureMenuItems(): iterable
     {
+	    yield MenuItem::linkToRoute('Статистика', 'fa fa-chart-line', 'admin_stats');
         yield MenuItem::linkToCrud('Игроки', 'fas fa-user', User::class);
         yield MenuItem::linkToCrud('Игры', 'fas fa-list', Game::class);
         yield MenuItem::linkToCrud('Кошельки', 'fas fa-list', Wallet::class);

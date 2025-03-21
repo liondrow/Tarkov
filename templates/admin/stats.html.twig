@@ -1,0 +1,138 @@
+{% extends '@EasyAdmin/layout.html.twig' %}
+
+{% block page_title %}Статистика{% endblock %}
+
+{% block content %}
+    <div class="stats-container" style="margin-top: 30px">
+        <h1 class="page-title">📊 Статистика</h1>
+
+        <div class="dashboard-metrics">
+            <div class="metric">
+                <div class="metric-icon">
+                    <i class="fa fa-users"></i>
+                </div>
+                <div class="metric-content">
+                    <h2>Общее число игроков</h2>
+                    <p>{{ totalPlayers }}</p>
+                </div>
+            </div>
+
+            <div class="metric">
+                <div class="metric-icon">
+                    <i class="fa fa-chart-line"></i>
+                </div>
+                <div class="metric-content">
+                    <h2>Всего выполнено квестов игроками</h2>
+                    <p>{{ finishedQuestCount }}</p>
+                </div>
+            </div>
+
+        </div>
+        <div class="dashboard-metrics" style="margin-top: 30px;">
+
+            <div class="metric">
+                <div class="metric-icon">
+                    <i class="fa fa-coins"></i>
+                </div>
+                <div class="metric-content">
+                    <h2>Самые богатые игроки:</h2>
+                    <ul>
+                        {% for reachableUserName, reachableUserWalletValue in mostReachableUsers %}
+                            <li>
+                                <p>{{ reachableUserName }}: {{ reachableUserWalletValue }}</p>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <div class="metric">
+                <div class="metric-icon">
+                    <i class="fa fa-coins"></i>
+                </div>
+                <div class="metric-content">
+                    <h2>Денег у торговцев:</h2>
+                    <ul>
+                        {% for reachableSellerName, reachableSellerWalletValue in mostReachableSellers %}
+                            <li>
+                                <p>{{ reachableSellerName }}: {{ reachableSellerWalletValue }}</p>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <div class="metric">
+                <div class="metric-icon">
+                    <i class="fa fa-scroll"></i>
+                </div>
+                <div class="metric-content">
+                    <h2>Больше всего квестов:</h2>
+                    <ul>
+                        {% for usersQuestProgress in mostUsersQuestProgress %}
+                            <li>
+                                <p>{{ usersQuestProgress.nickname }}: {{ usersQuestProgress.finishedQuests }}</p>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <style>
+		.stats-container {
+			max-width: 1200px;
+			margin: 0 auto;
+			text-align: center;
+		}
+
+		.page-title {
+			text-align: center;
+			font-size: 28px;
+			font-weight: bold;
+			margin-bottom: 20px;
+		}
+
+		.dashboard-metrics {
+			display: flex;
+			justify-content: center;
+			gap: 20px;
+			flex-wrap: wrap;
+		}
+
+		.metric {
+			display: flex;
+			align-items: center;
+			gap: 15px;
+			background: #fff;
+			padding: 20px;
+			border-radius: 12px;
+			box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+			width: 300px;
+			transition: transform 0.2s ease-in-out;
+			text-align: left;
+		}
+
+		.metric:hover {
+			transform: scale(1.05);
+		}
+
+		.metric-icon {
+			font-size: 32px;
+			color: #007bff;
+		}
+
+		.metric-content h2 {
+			font-size: 18px;
+			margin: 0;
+			color: #333;
+		}
+
+		.metric-content p {
+			font-size: 24px;
+			font-weight: bold;
+			margin: 5px 0 0;
+			color: #007bff;
+		}
+    </style>
+{% endblock %}

@@ -19,7 +19,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
     name: 'app:create-shelters',
     description: 'Маппинг модулей убежища по всем командам',
 )]
-class AddSheltersForCommandsCommand extends Command
+class AddSheltersForUsersCommand extends Command
 {
     public function __construct(private readonly EntityManagerInterface $entityManager)
     {

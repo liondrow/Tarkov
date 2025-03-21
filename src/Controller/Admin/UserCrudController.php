@@ -4,6 +4,8 @@ namespace App\Controller\Admin;
 
 use App\Entity\User;
 use Closure;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\KeyValueStore;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
@@ -15,6 +17,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -35,11 +38,50 @@ class UserCrudController extends AbstractCrudController
 		return User::class;
 	}
 
+	public function configureActions(Actions $actions): Actions
+	{
+		$actions->update(Crud::PAGE_INDEX, Action::NEW, function(Action $action) {
+			return $action->setLabel('Создать игрока');
+		});
+		$actions->add(Crud::PAGE_NEW, Action::INDEX);
+		$actions->add(Crud::PAGE_EDIT, Action::INDEX);
+		return parent::configureActions($actions);
+	}
+
+
+	public function configureCrud(Crud $crud): Crud
+	{
+		return $crud
+			->setEntityLabelInPlural('Список игроков')
+			->setSearchFields(['id', 'name'])
+			->setDefaultSort(['id' => 'ASC'])
+			->setPageTitle(Crud::PAGE_NEW, "Новый игрок")
+			->setPageTitle(Crud::PAGE_INDEX, "Список игроков")
+			->setEntityLabelInSingular(function (?User $user, ?string $pageName) {
+				if($pageName == 'new') {
+					return 'игрока';
+				} else if($pageName == 'edit') {
+					return $user->getNickname();
+				}
+			})
+			;
+	}
+
 	public function configureFields(string $pageName): iterable
 	{
+		$adminUrlGenerator = $this->container->get(AdminUrlGenerator::class);
 		$fields = [
 			IdField::new('id')->hideOnForm(),
 			TextField::new('username'),
+			TextField::new('nickname')->formatValue(function ($value, $entity) use ($adminUrlGenerator) {
+				$url = $adminUrlGenerator
+					->setController(self::class)
+					->setAction('edit')
+					->setEntityId($entity->getId())
+					->generateUrl();
+
+				return sprintf('<a href="%s">%s</a>', $url, $value);
+			}),
 			BooleanField::new('enabled'),
 		];
 
@@ -54,8 +96,6 @@ class UserCrudController extends AbstractCrudController
 			->setRequired($pageName === Crud::PAGE_NEW)
 			->onlyOnForms();
 		$fields[] = $password;
-
-		$fields[] = TextField::new('userName');
 		$fields[] = TextField::new('airsoftTeam');
 		$fields[] = DateField::new('createdAt');
 		$fields[] = AssociationField::new('questBranch')->hideOnIndex();
