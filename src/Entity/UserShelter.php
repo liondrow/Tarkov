@@ -2,11 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\TeamShelterRepository;
+use App\Repository\UserShelterRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: TeamShelterRepository::class)]
-class TeamShelter
+#[ORM\Entity(repositoryClass: UserShelterRepository::class)]
+class UserShelter
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -17,9 +17,9 @@ class TeamShelter
     #[ORM\JoinColumn(nullable: false)]
     private ?Game $game = null;
 
-    #[ORM\ManyToOne(inversedBy: 'teamShelters')]
+    #[ORM\ManyToOne(inversedBy: 'userShelters')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $team = null;
+    private ?User $user = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
@@ -45,14 +45,14 @@ class TeamShelter
         return $this;
     }
 
-    public function getTeam(): ?User
+    public function getUser(): ?User
     {
-        return $this->team;
+        return $this->user;
     }
 
-    public function setTeam(?User $team): static
+    public function setUser(?User $user): static
     {
-        $this->team = $team;
+        $this->user = $user;
 
         return $this;
     }

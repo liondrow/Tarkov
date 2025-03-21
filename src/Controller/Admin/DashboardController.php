@@ -9,7 +9,7 @@ use App\Entity\Quest;
 use App\Entity\QuestBranch;
 use App\Entity\QuestProgress;
 use App\Entity\Shelter;
-use App\Entity\TeamShelter;
+use App\Entity\UserShelter;
 use App\Entity\User;
 use App\Entity\Wallet;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
@@ -39,7 +39,7 @@ class DashboardController extends AbstractDashboardController
 
     public function configureMenuItems(): iterable
     {
-        yield MenuItem::linkToCrud('Команды', 'fas fa-user', User::class);
+        yield MenuItem::linkToCrud('Игроки', 'fas fa-user', User::class);
         yield MenuItem::linkToCrud('Игры', 'fas fa-list', Game::class);
         yield MenuItem::linkToCrud('Кошельки', 'fas fa-list', Wallet::class);
         yield MenuItem::linkToCrud('Барахолка', 'fas fa-list', MarketItem::class);
@@ -48,6 +48,6 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Ветки квестов', 'fas fa-list', QuestBranch::class);
         yield MenuItem::linkToCrud('Распределенные квесты', 'fas fa-list', QuestProgress::class);
         yield MenuItem::linkToCrud('Убежище', 'fas fa-list', Shelter::class);
-        yield MenuItem::linkToCrud('Распределенные модулей', 'fas fa-list', TeamShelter::class);
+        yield MenuItem::linkToCrud('Распределенные модули', 'fas fa-list', UserShelter::class);
     }
 }

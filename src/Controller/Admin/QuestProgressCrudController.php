@@ -39,7 +39,7 @@ class QuestProgressCrudController extends AbstractCrudController
 				if($pageName == 'new') {
 					return 'распределение';
 				} else if($pageName == 'edit') {
-					return $questStatus->getTeam()->getTeamName() . " / " . $questStatus->getQuest()->getName();
+					return $questStatus->getUser()->getNickname() . " / " . $questStatus->getQuest()->getName();
 				}
 			})
 			;
@@ -50,7 +50,7 @@ class QuestProgressCrudController extends AbstractCrudController
         return [
             IdField::new('id')->hideOnForm(),
             ChoiceField::new('status')->setChoices(QuestStatus::cases()),
-	        AssociationField::new('team')->setQueryBuilder(function (QueryBuilder $queryBuilder) {
+	        AssociationField::new('user')->setQueryBuilder(function (QueryBuilder $queryBuilder) {
 		        return $queryBuilder->andWhere('entity.enabled = :enabled')->setParameter('enabled', true);
 	        }),
 	        AssociationField::new('quest')

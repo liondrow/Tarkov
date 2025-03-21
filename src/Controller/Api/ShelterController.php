@@ -22,7 +22,7 @@ class ShelterController extends AbstractController
 		$activeGame = $gameService->getCurrentGame();
 		/** @var User $user */
 		$user = $this->getUser();
-		$shelters = $shelterService->getSheltersForTeam($activeGame, $user);
+		$shelters = $shelterService->getSheltersForUser($activeGame, $user);
 		return new JsonResponse($shelters);
     }
 }

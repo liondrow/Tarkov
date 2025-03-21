@@ -21,11 +21,11 @@ class InvoiceJournal
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
-    private ?User $teamFrom = null;
+    private ?User $userFrom = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
-    private ?User $teamTo = null;
+    private ?User $userTo = null;
 
     #[ORM\Column(nullable: true)]
     private ?float $sum = null;
@@ -56,26 +56,26 @@ class InvoiceJournal
         return $this;
     }
 
-    public function getTeamFrom(): ?User
+    public function getUserFrom(): ?User
     {
-        return $this->teamFrom;
+        return $this->userFrom;
     }
 
-    public function setTeamFrom(?User $teamFrom): static
+    public function setUserFrom(?User $userFrom): static
     {
-        $this->teamFrom = $teamFrom;
+        $this->userFrom = $userFrom;
 
         return $this;
     }
 
-    public function getTeamTo(): ?User
+    public function getUserTo(): ?User
     {
-        return $this->teamTo;
+        return $this->userTo;
     }
 
-    public function setTeamTo(?User $teamTo): static
+    public function setUserTo(?User $userTo): static
     {
-        $this->teamTo = $teamTo;
+        $this->userTo = $userTo;
 
         return $this;
     }

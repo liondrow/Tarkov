@@ -32,15 +32,15 @@ class QuestProgressRepository extends ServiceEntityRepository
 			->getResult();
 	}
 
-	public function findQuestProgressByBranchAndParentQuest(int $parentQuest, int $teamId)
+	public function findQuestProgressByBranchAndParentQuest(int $parentQuest, int $userId)
 	{
 		return $this->createQueryBuilder('qp')
 			->join('qp.quest', 'q')
 			->where('q.parent = :parent')
-			->andWhere('qp.team = :team')
+			->andWhere('qp.user = :user')
 			->andWhere('qp.status = :status')
 			->setParameter('parent', $parentQuest)
-			->setParameter('team', $teamId)
+			->setParameter('user', $userId)
 			->setParameter('status', QuestStatus::QUEUE)
 			->getQuery()
 			->getResult();

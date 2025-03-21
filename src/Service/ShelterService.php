@@ -6,7 +6,7 @@ use App\Entity\Game;
 use App\Entity\InvoiceJournal;
 use App\Entity\MarketInvoice;
 use App\Entity\MarketItem;
-use App\Entity\TeamShelter;
+use App\Entity\UserShelter;
 use App\Entity\User;
 use App\Entity\Wallet;
 use App\Enum\InvoiceType;
@@ -25,11 +25,11 @@ class ShelterService
 	}
 
 
-	public function getSheltersForTeam(Game $game, User $user): array
+	public function getSheltersForUser(Game $game, User $user): array
 	{
 		$shelters = [];
-		$teamShelters = $this->entityManager->getRepository(TeamShelter::class)->getSheltersListByTeamAndGame($game, $user);
-		foreach($teamShelters as $shelter) {
+		$userShelters = $this->entityManager->getRepository(UserShelter::class)->getSheltersListByUserAndGame($game, $user);
+		foreach($userShelters as $shelter) {
 			$shelters[] = ShelterDto::newFromEntity($shelter);
 		}
 		return $shelters;

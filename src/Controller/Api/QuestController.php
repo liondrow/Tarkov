@@ -20,11 +20,11 @@ class QuestController extends AbstractController
 	}
 
 	#[Route('quests', name: 'app_quests')]
-    public function getTeamQuests(): JsonResponse
+    public function getUserQuests(): JsonResponse
     {
-		/** @var User $team */
-		$team = $this->getUser();
-	    $questsProgresses = $this->entityManager->getRepository(QuestProgress::class)->findBy(['team' => $team, 'status' => QuestStatus::ACTIVE]);
+		/** @var User $user */
+	    $user = $this->getUser();
+	    $questsProgresses = $this->entityManager->getRepository(QuestProgress::class)->findBy(['user' => $user, 'status' => QuestStatus::ACTIVE]);
 		$quests = [];
 		foreach($questsProgresses as $progress) {
 			$quests[] = QuestDto::newFromEntity($progress->getQuest());
@@ -33,11 +33,11 @@ class QuestController extends AbstractController
     }
 
 	#[Route('finished_quests', name: 'app_finished_quests')]
-	public function getFinishedTeamQuests(): JsonResponse
+	public function getFinishedUserQuests(): JsonResponse
 	{
-		/** @var User $team */
-		$team = $this->getUser();
-		$questsProgresses = $this->entityManager->getRepository(QuestProgress::class)->findBy(['team' => $team, 'status' => QuestStatus::FINISHED]);
+		/** @var User $user */
+		$user = $this->getUser();
+		$questsProgresses = $this->entityManager->getRepository(QuestProgress::class)->findBy(['user' => $user, 'status' => QuestStatus::FINISHED]);
 		$quests = [];
 		foreach($questsProgresses as $progress) {
 			$quests[] = QuestDto::newFromEntity($progress->getQuest());

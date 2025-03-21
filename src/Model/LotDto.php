@@ -36,7 +36,7 @@ class LotDto implements \JsonSerializable
 		$r->setId($item->getId());
 		$r->setItem($item->getItem());
 		$r->setPrice($item->getPrice());
-		$r->setSeller($item->getSeller()->getTeamName());
+		$r->setSeller($item->getSeller()->getNickname());
 		$r->setDate($item->getCreated());
 		return $r;
 	}

@@ -5,7 +5,7 @@ namespace App\Command;
 use App\Entity\Game;
 use App\Entity\QuestProgress;
 use App\Entity\Shelter;
-use App\Entity\TeamShelter;
+use App\Entity\UserShelter;
 use App\Entity\User;
 use App\Enum\QuestStatus;
 use Doctrine\ORM\EntityManagerInterface;
@@ -36,16 +36,16 @@ class AddSheltersForCommandsCommand extends Command
 			return Command::INVALID;
 		}
 
-		$teams = $this->checkTeamsForGame($activeGame);
-		if(!$teams) {
+		$users = $this->checkUsersForGame($activeGame);
+		if(!$users) {
 			$io->error('Проблема с командами');
 			return Command::FAILURE;
 		}
 
-		$this->entityManager->getRepository(TeamShelter::class)->clearTable();
-	    foreach($teams as $team) {
-			$distributedShelterCount = $this->distributeShelterForTeam($activeGame, $team);
-			$io->note(sprintf("Для команды %s было распределено %d модулей убежища", $team->getTeamName(), $distributedShelterCount));
+		$this->entityManager->getRepository(UserShelter::class)->clearTable();
+	    foreach($users as $user) {
+			$distributedShelterCount = $this->distributeShelterForUser($activeGame, $user);
+			$io->note(sprintf("Для команды %s было распределено %d модулей убежища", $user->getNickName(), $distributedShelterCount));
 		}
 
         $io->success('Модули убежища были распределены по командам, согласно указанным веткам');
@@ -53,35 +53,35 @@ class AddSheltersForCommandsCommand extends Command
         return Command::SUCCESS;
     }
 
-	private function distributeShelterForTeam(Game $game, User $team): int
+	private function distributeShelterForUser(Game $game, User $user): int
 	{
 		$distributedShelterCount = 0;
 		$shelters = $game->getShelters()->filter(function(Shelter $shelter) {
 			return $shelter->isEnabled();
 		})->getValues();
 		foreach($shelters as $shelter) {
-			$teamShelter = new TeamShelter();
-			$teamShelter->setTeam($team);
-			$teamShelter->setGame($game);
-			$teamShelter->setShelter($shelter);
-			$teamShelter->setEnabled(false);
+			$userShelter = new UserShelter();
+			$userShelter->setUser($user);
+			$userShelter->setGame($game);
+			$userShelter->setShelter($shelter);
+			$userShelter->setEnabled(false);
 
-			$this->entityManager->persist($teamShelter);
+			$this->entityManager->persist($userShelter);
 			$distributedShelterCount++;
 		}
 		$this->entityManager->flush();
 		return $distributedShelterCount;
 	}
 
-	private function checkTeamsForGame(Game $game): mixed
+	private function checkUsersForGame(Game $game): mixed
 	{
-		$teams = $game->getUsers()->filter(function(User $user) {
+		$users = $game->getUsers()->filter(function(User $user) {
 			return ($user->isEnabled() && $user->isIsPmc());
 		})->getValues();
-		if(empty($teams)) {
+		if(empty($users)) {
 			return false;
 		}
-		return $teams;
+		return $users;
 	}
 
 }

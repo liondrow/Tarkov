@@ -39,7 +39,7 @@ class WalletCrudController extends AbstractCrudController
 				if($pageName == 'new') {
 					return 'игру';
 				} else if($pageName == 'edit') {
-					return $wallet->getTeam()->getTeamName();
+					return $wallet->getUser()->getNickname();
 				}
 			})
 			;
@@ -50,7 +50,7 @@ class WalletCrudController extends AbstractCrudController
 		return [
 			IdField::new('id')->hideOnForm(),
 			NumberField::new('value')->setEmptyData(5000),
-			AssociationField::new('team'),
+			AssociationField::new('user'),
 			AssociationField::new('game')
 		];
 	}

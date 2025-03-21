@@ -52,22 +52,22 @@ class MarketService
 		$this->entityManager->beginTransaction();
 		try
 		{
-			$buyerWallet = $this->entityManager->getRepository(Wallet::class)->findOneBy(['game' => $game, 'team' => $user]);
+			$buyerWallet = $this->entityManager->getRepository(Wallet::class)->findOneBy(['game' => $game, 'user' => $user]);
 			if($buyerWallet->getValue() < $lot->getPrice()) {
 				throw new GameException("Недостаточно средств на счете");
 			}
 			$newBuyerWallet = $buyerWallet->getValue() - $lot->getPrice();
 			$buyerWallet->setValue($newBuyerWallet);
 
-			$sellerWallet = $this->entityManager->getRepository(Wallet::class)->findOneBy(['game' => $game, 'team' => $lot->getSeller()]);
+			$sellerWallet = $this->entityManager->getRepository(Wallet::class)->findOneBy(['game' => $game, 'user' => $lot->getSeller()]);
 			$sellerWallet->setValue($sellerWallet->getValue() + $lot->getPrice());
 
 			$invoiceJournal = new InvoiceJournal();
 			$invoiceJournal->setType(InvoiceType::MARKET);
 			$invoiceJournal->setSum($lot->getPrice());
 			$invoiceJournal->setGame($game);
-			$invoiceJournal->setTeamFrom($user);
-			$invoiceJournal->setTeamTo($lot->getSeller());
+			$invoiceJournal->setUserFrom($user);
+			$invoiceJournal->setUserTo($lot->getSeller());
 			$invoiceJournal->setCreateAt(new \DateTimeImmutable());
 
 			$this->entityManager->persist($marketInvoice);

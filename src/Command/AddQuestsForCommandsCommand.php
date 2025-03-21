@@ -33,16 +33,16 @@ class AddQuestsForCommandsCommand extends Command
 			$io->error('Указанная игра не найдена или не активна');
 			return Command::INVALID;
 		}
-		$teams = $this->checkTeamsForGame($activeGame);
-		if(!$teams) {
+		$users = $this->checkUsersForGame($activeGame);
+		if(!$users) {
 			$io->error('Проблема с командами или не всем командам назначены ветки квестов');
 			return Command::FAILURE;
 		}
 
 		$this->entityManager->getRepository(QuestProgress::class)->clearTable();
-	    foreach($teams as $team) {
-			$distributedQuestCount = $this->distributeQuestForTeam($team);
-			$io->note(sprintf("Для команды %s было распределено %d квестов", $team->getTeamName(), $distributedQuestCount));
+	    foreach($users as $user) {
+			$distributedQuestCount = $this->distributeQuestForUser($user);
+			$io->note(sprintf("Для команды %s было распределено %d квестов", $user->getNickName(), $distributedQuestCount));
 		}
 
         $io->success('Квесты были распределены по командам, согласно указанным веткам');
@@ -50,15 +50,15 @@ class AddQuestsForCommandsCommand extends Command
         return Command::SUCCESS;
     }
 
-	private function distributeQuestForTeam(User $team): int
+	private function distributeQuestForUser(User $user): int
 	{
 		$distributedQuestCount = 0;
-		$questBranch = $team->getQuestBranch();
+		$questBranch = $user->getQuestBranch();
 		$quests = $questBranch->getQuests();
 		foreach($quests as $quest) {
 			$questProgress = new QuestProgress();
 			$questProgress->setQuest($quest);
-			$questProgress->setTeam($team);
+			$questProgress->setUser($user);
 			$status = ($distributedQuestCount === 0 || empty($quest->getParent())) ? QuestStatus::ACTIVE : QuestStatus::QUEUE;
 			$questProgress->setStatus($status);
 			$questProgress->setEnabled(true);
@@ -69,20 +69,20 @@ class AddQuestsForCommandsCommand extends Command
 		return $distributedQuestCount;
 	}
 
-	private function checkTeamsForGame(Game $game): mixed
+	private function checkUsersForGame(Game $game): mixed
 	{
-		$teams = $game->getUsers()->filter(function(User $user) {
+		$users = $game->getUsers()->filter(function(User $user) {
 			return ($user->isEnabled() && !$user->isSeller());
 		})->getValues();
-		if(empty($teams)) {
+		if(empty($users)) {
 			return false;
 		}
-		foreach($teams as $team) {
-			if(empty($team->getQuestBranch())) {
+		foreach($users as $user) {
+			if(empty($user->getQuestBranch())) {
 				return false;
 			}
 		}
-		return $teams;
+		return $users;
 	}
 
 }

@@ -36,7 +36,7 @@ class QuestProgressEasyAdminSubscriber implements EventSubscriberInterface
 		}
 
 		if($entity->getStatus() == QuestStatus::FINISHED) {
-			$childQuests = $this->entityManager->getRepository(QuestProgress::class)->findQuestProgressByBranchAndParentQuest($entity->getQuest()->getId(), $entity->getTeam()->getId());
+			$childQuests = $this->entityManager->getRepository(QuestProgress::class)->findQuestProgressByBranchAndParentQuest($entity->getQuest()->getId(), $entity->getUser()->getId());
 			if(!empty($childQuests)) {
 				/** @var QuestProgress $childQuest */
 				foreach($childQuests as $childQuest) {

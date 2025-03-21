@@ -6,6 +6,6 @@ enum InvoiceType: string
 {
 	case MARKET = "market";
 	case SELLER = "seller";
-	case TEAM = "team";
+	case User = "user";
 	case QUEST = "quest";
 }

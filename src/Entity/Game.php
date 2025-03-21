@@ -13,289 +13,300 @@ class Game
 {
 
 	public function __toString(): string
-                                             	{
-                                             		return $this->getName();
-                                             	}
+	{
+		return $this->getName();
+	}
 
 	#[ORM\Id]
-                                                 #[ORM\GeneratedValue]
-                                                 #[ORM\Column]
-                                                 private ?int $id = null;
+	#[ORM\GeneratedValue]
+	#[ORM\Column]
+	private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $name = null;
+	#[ORM\Column(length: 255)]
+	private ?string $name = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $date = null;
+	#[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+	private ?\DateTimeInterface $date = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?bool $enabled = null;
+	#[ORM\Column(nullable: true)]
+	private ?bool $enabled = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $created = null;
+	#[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+	private ?\DateTimeInterface $created = null;
 
-    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'game')]
-    private Collection $users;
+	#[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'game')]
+	private Collection $users;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $city = null;
+	#[ORM\Column(length: 255, nullable: true)]
+	private ?string $city = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $mapX = null;
+	#[ORM\Column(length: 255, nullable: true)]
+	private ?string $mapX = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $mapY = null;
+	#[ORM\Column(length: 255, nullable: true)]
+	private ?string $mapY = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $dateEnd = null;
+	#[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+	private ?\DateTimeInterface $dateEnd = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $polygon = null;
+	#[ORM\Column(length: 255, nullable: true)]
+	private ?string $polygon = null;
 
-    #[ORM\OneToMany(mappedBy: 'game', targetEntity: QuestBranch::class, orphanRemoval: true)]
-    private Collection $questBranches;
+	#[ORM\OneToMany(mappedBy: 'game', targetEntity: QuestBranch::class, orphanRemoval: true)]
+	private Collection $questBranches;
 
-    #[ORM\OneToMany(mappedBy: 'game', targetEntity: MarketItem::class)]
-    private Collection $marketItems;
+	#[ORM\OneToMany(mappedBy: 'game', targetEntity: MarketItem::class)]
+	private Collection $marketItems;
 
-    #[ORM\OneToMany(mappedBy: 'game', targetEntity: Shelter::class, orphanRemoval: true)]
-    private Collection $shelters;
+	#[ORM\OneToMany(mappedBy: 'game', targetEntity: Shelter::class, orphanRemoval: true)]
+	private Collection $shelters;
 
-    public function __construct()
-    {
-        $this->users = new ArrayCollection();
-        $this->questBranches = new ArrayCollection();
-        $this->marketItems = new ArrayCollection();
-        $this->shelters = new ArrayCollection();
-    }
+	public function __construct()
+	{
+		$this->users = new ArrayCollection();
+		$this->questBranches = new ArrayCollection();
+		$this->marketItems = new ArrayCollection();
+		$this->shelters = new ArrayCollection();
+	}
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+	public function getId(): ?int
+	{
+		return $this->id;
+	}
 
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
+	public function getName(): ?string
+	{
+		return $this->name;
+	}
 
-    public function setName(string $name): static
-    {
-        $this->name = $name;
+	public function setName(string $name): static
+	{
+		$this->name = $name;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    public function getDate(): ?\DateTimeInterface
-    {
-        return $this->date;
-    }
+	public function getDate(): ?\DateTimeInterface
+	{
+		return $this->date;
+	}
 
-    public function setDate(?\DateTimeInterface $date): static
-    {
-        $this->date = $date;
+	public function setDate(?\DateTimeInterface $date): static
+	{
+		$this->date = $date;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    public function isEnabled(): ?bool
-    {
-        return $this->enabled;
-    }
+	public function isEnabled(): ?bool
+	{
+		return $this->enabled;
+	}
 
-    public function setEnabled(?bool $enabled): static
-    {
-        $this->enabled = $enabled;
+	public function setEnabled(?bool $enabled): static
+	{
+		$this->enabled = $enabled;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    public function getCreated(): ?\DateTimeInterface
-    {
-        return $this->created;
-    }
+	public function getCreated(): ?\DateTimeInterface
+	{
+		return $this->created;
+	}
 
-    public function setCreated(?\DateTimeInterface $created): static
-    {
-        $this->created = $created;
+	public function setCreated(?\DateTimeInterface $created): static
+	{
+		$this->created = $created;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * @return Collection<int, User>
-     */
-    public function getUsers(): Collection
-    {
-        return $this->users;
-    }
+	/**
+	 * @return Collection<int, User>
+	 */
+	public function getUsers(): Collection
+	{
+		return $this->users;
+	}
 
-    public function addUser(User $user): static
-    {
-        if (!$this->users->contains($user)) {
-            $this->users->add($user);
-            $user->addGame($this);
-        }
+	public function addUser(User $user): static
+	{
+		if (!$this->users->contains($user))
+		{
+			$this->users->add($user);
+			$user->addGame($this);
+		}
 
-        return $this;
-    }
+		return $this;
+	}
 
-    public function removeUser(User $user): static
-    {
-        if ($this->users->removeElement($user)) {
-            $user->removeGame($this);
-        }
+	public function removeUser(User $user): static
+	{
+		if ($this->users->removeElement($user))
+		{
+			$user->removeGame($this);
+		}
 
-        return $this;
-    }
+		return $this;
+	}
 
-    public function getCity(): ?string
-    {
-        return $this->city;
-    }
+	public function getCity(): ?string
+	{
+		return $this->city;
+	}
 
-    public function setCity(?string $city): static
-    {
-        $this->city = $city;
+	public function setCity(?string $city): static
+	{
+		$this->city = $city;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    public function getMapX(): ?string
-    {
-        return $this->mapX;
-    }
+	public function getMapX(): ?string
+	{
+		return $this->mapX;
+	}
 
-    public function setMapX(?string $mapX): static
-    {
-        $this->mapX = $mapX;
+	public function setMapX(?string $mapX): static
+	{
+		$this->mapX = $mapX;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    public function getMapY(): ?string
-    {
-        return $this->mapY;
-    }
+	public function getMapY(): ?string
+	{
+		return $this->mapY;
+	}
 
-    public function setMapY(?string $mapY): static
-    {
-        $this->mapY = $mapY;
+	public function setMapY(?string $mapY): static
+	{
+		$this->mapY = $mapY;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    public function getDateEnd(): ?\DateTimeInterface
-    {
-        return $this->dateEnd;
-    }
+	public function getDateEnd(): ?\DateTimeInterface
+	{
+		return $this->dateEnd;
+	}
 
-    public function setDateEnd(?\DateTimeInterface $dateEnd): static
-    {
-        $this->dateEnd = $dateEnd;
+	public function setDateEnd(?\DateTimeInterface $dateEnd): static
+	{
+		$this->dateEnd = $dateEnd;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    public function getPolygon(): ?string
-    {
-        return $this->polygon;
-    }
+	public function getPolygon(): ?string
+	{
+		return $this->polygon;
+	}
 
-    public function setPolygon(?string $polygon): static
-    {
-        $this->polygon = $polygon;
+	public function setPolygon(?string $polygon): static
+	{
+		$this->polygon = $polygon;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * @return Collection<int, QuestBranch>
-     */
-    public function getQuestBranches(): Collection
-    {
-        return $this->questBranches;
-    }
+	/**
+	 * @return Collection<int, QuestBranch>
+	 */
+	public function getQuestBranches(): Collection
+	{
+		return $this->questBranches;
+	}
 
-    public function addQuestBranch(QuestBranch $questBranch): static
-    {
-        if (!$this->questBranches->contains($questBranch)) {
-            $this->questBranches->add($questBranch);
-            $questBranch->setGame($this);
-        }
+	public function addQuestBranch(QuestBranch $questBranch): static
+	{
+		if (!$this->questBranches->contains($questBranch))
+		{
+			$this->questBranches->add($questBranch);
+			$questBranch->setGame($this);
+		}
 
-        return $this;
-    }
+		return $this;
+	}
 
-    public function removeQuestBranch(QuestBranch $questBranch): static
-    {
-        if ($this->questBranches->removeElement($questBranch)) {
-            // set the owning side to null (unless already changed)
-            if ($questBranch->getGame() === $this) {
-                $questBranch->setGame(null);
-            }
-        }
+	public function removeQuestBranch(QuestBranch $questBranch): static
+	{
+		if ($this->questBranches->removeElement($questBranch))
+		{
+			// set the owning side to null (unless already changed)
+			if ($questBranch->getGame() === $this)
+			{
+				$questBranch->setGame(null);
+			}
+		}
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * @return Collection<int, MarketItem>
-     */
-    public function getMarketItems(): Collection
-    {
-        return $this->marketItems;
-    }
+	/**
+	 * @return Collection<int, MarketItem>
+	 */
+	public function getMarketItems(): Collection
+	{
+		return $this->marketItems;
+	}
 
-    public function addMarketItem(MarketItem $marketItem): static
-    {
-        if (!$this->marketItems->contains($marketItem)) {
-            $this->marketItems->add($marketItem);
-            $marketItem->setGame($this);
-        }
+	public function addMarketItem(MarketItem $marketItem): static
+	{
+		if (!$this->marketItems->contains($marketItem))
+		{
+			$this->marketItems->add($marketItem);
+			$marketItem->setGame($this);
+		}
 
-        return $this;
-    }
+		return $this;
+	}
 
-    public function removeMarketItem(MarketItem $marketItem): static
-    {
-        if ($this->marketItems->removeElement($marketItem)) {
-            // set the owning side to null (unless already changed)
-            if ($marketItem->getGame() === $this) {
-                $marketItem->setGame(null);
-            }
-        }
+	public function removeMarketItem(MarketItem $marketItem): static
+	{
+		if ($this->marketItems->removeElement($marketItem))
+		{
+			// set the owning side to null (unless already changed)
+			if ($marketItem->getGame() === $this)
+			{
+				$marketItem->setGame(null);
+			}
+		}
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * @return Collection<int, Shelter>
-     */
-    public function getShelters(): Collection
-    {
-        return $this->shelters;
-    }
+	/**
+	 * @return Collection<int, Shelter>
+	 */
+	public function getShelters(): Collection
+	{
+		return $this->shelters;
+	}
 
-    public function addShelter(Shelter $shelter): static
-    {
-        if (!$this->shelters->contains($shelter)) {
-            $this->shelters->add($shelter);
-            $shelter->setGame($this);
-        }
+	public function addShelter(Shelter $shelter): static
+	{
+		if (!$this->shelters->contains($shelter))
+		{
+			$this->shelters->add($shelter);
+			$shelter->setGame($this);
+		}
 
-        return $this;
-    }
+		return $this;
+	}
 
-    public function removeShelter(Shelter $shelter): static
-    {
-        if ($this->shelters->removeElement($shelter)) {
-            // set the owning side to null (unless already changed)
-            if ($shelter->getGame() === $this) {
-                $shelter->setGame(null);
-            }
-        }
+	public function removeShelter(Shelter $shelter): static
+	{
+		if ($this->shelters->removeElement($shelter))
+		{
+			// set the owning side to null (unless already changed)
+			if ($shelter->getGame() === $this)
+			{
+				$shelter->setGame(null);
+			}
+		}
 
-        return $this;
-    }
+		return $this;
+	}
 }

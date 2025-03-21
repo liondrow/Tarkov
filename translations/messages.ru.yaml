@@ -66,9 +66,9 @@ MapPoint: точку на карте
 Clip Rect: Координаты спрайта
 Person: Персонаж
 Reputation: Репутация
-User: Команда
+User: Игрок
 Date End: Дата окончания
-Username: TeamId
+Username: ID игрока
 Is Pmc: ЧВК
 Is Auctioner: Барахольщик
 Quest Branch: Ветка квеста
@@ -77,3 +77,4 @@ Team Name: Название сквада
 Bonus: Награда
 Shelter: Модуль убежища
 Team: Команда
+User Name: Позывной

@@ -29,30 +29,30 @@ class WalletService
 	{
 	}
 
-	public function getInvoiceHistoryForGame(Game $game, User $team): array
+	public function getInvoiceHistoryForGame(Game $game, User $user): array
 	{
 		$resHistory = [];
-		$outgoingInvoices = $this->entityManager->getRepository(InvoiceJournal::class)->findBy(['game' => $game, 'teamFrom' => $team]);
+		$outgoingInvoices = $this->entityManager->getRepository(InvoiceJournal::class)->findBy(['game' => $game, 'userFrom' => $user]);
 		if(!empty($outgoingInvoices))
 		{
 			foreach ($outgoingInvoices as $outgoingInvoice)
 			{
 				$resHistory[$outgoingInvoice->getId()] = new InvoiceHistoryDto(
-					$outgoingInvoice->getTeamTo()->getUserIdentifier(),
-					$outgoingInvoice->getTeamTo()->getTeamName(),
+					$outgoingInvoice->getUserTo()->getUserIdentifier(),
+					$outgoingInvoice->getUserTo()->getNickname(),
 					$outgoingInvoice->getSum(),
 					self::TYPE_OUTGOING
 				);
 			}
 		}
-		$incomingInvoices = $this->entityManager->getRepository(InvoiceJournal::class)->findBy(['game' => $game, 'teamTo' => $team]);
+		$incomingInvoices = $this->entityManager->getRepository(InvoiceJournal::class)->findBy(['game' => $game, 'userTo' => $user]);
 		if(!empty($incomingInvoices))
 		{
 			foreach ($incomingInvoices as $incomingInvoice)
 			{
 				$resHistory[$incomingInvoice->getId()] = new InvoiceHistoryDto(
-					$incomingInvoice->getTeamFrom()->getUserIdentifier(),
-					$incomingInvoice->getTeamFrom()->getTeamName(),
+					$incomingInvoice->getUserFrom()->getUserIdentifier(),
+					$incomingInvoice->getUserFrom()->getNickname(),
 					$incomingInvoice->getSum(),
 					self::TYPE_INCOMING
 				);
@@ -118,12 +118,12 @@ class WalletService
 		return $resWallet->getValue();
 	}
 
-	private function saveInvoiceToJournal(Game $game, User $teamFrom, User $teamTo, float $sum): void
+	private function saveInvoiceToJournal(Game $game, User $userFrom, User $userTo, float $sum): void
 	{
 		$journalInvoice = new InvoiceJournal();
 		$journalInvoice->setGame($game);
-		$journalInvoice->setTeamTo($teamTo);
-		$journalInvoice->setTeamFrom($teamFrom);
+		$journalInvoice->setUserTo($userTo);
+		$journalInvoice->setUserFrom($userFrom);
 		$journalInvoice->setSum($sum);
 		$journalInvoice->setCreateAt(new \DateTimeImmutable());
 		$this->entityManager->persist($journalInvoice);

@@ -13,8 +13,8 @@ class InvoiceHistoryDto implements \JsonSerializable
 {
 
 	public function __construct(
-		private string $teamId,
-		private string $team,
+		private string $userId,
+		private string $user,
 		private float $sum,
 		private string $type
 	)
@@ -24,21 +24,21 @@ class InvoiceHistoryDto implements \JsonSerializable
 	public function jsonSerialize(): mixed
 	{
 		return [
-			'teamId' => $this->getTeamId(),
-			'team' => $this->getTeam(),
+			'userId' => $this->getUserId(),
+			'user' => $this->getUser(),
 			'sum' => $this->getSum(),
 			'type' => $this->getType()
 		];
 	}
 
-	public function getTeam(): string
+	public function getUser(): string
 	{
-		return $this->team;
+		return $this->user;
 	}
 
-	public function setTeam(string $team): void
+	public function setUser(string $user): void
 	{
-		$this->team = $team;
+		$this->user = $user;
 	}
 
 	public function getSum(): float
@@ -61,14 +61,14 @@ class InvoiceHistoryDto implements \JsonSerializable
 		$this->type = $type;
 	}
 
-	public function getTeamId(): string
+	public function getUserId(): string
 	{
-		return $this->teamId;
+		return $this->userId;
 	}
 
-	public function setTeamId(string $teamId): void
+	public function setUserId(string $userId): void
 	{
-		$this->teamId = $teamId;
+		$this->userId = $userId;
 	}
 
 

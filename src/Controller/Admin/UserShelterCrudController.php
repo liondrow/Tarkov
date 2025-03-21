@@ -2,7 +2,7 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\TeamShelter;
+use App\Entity\UserShelter;
 use App\Enum\QuestStatus;
 use Doctrine\ORM\QueryBuilder;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
@@ -16,11 +16,11 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
-class TeamShelterCrudController extends AbstractCrudController
+class UserShelterCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
     {
-        return TeamShelter::class;
+        return UserShelter::class;
     }
 
 	public function configureActions(Actions $actions): Actions
@@ -38,11 +38,11 @@ class TeamShelterCrudController extends AbstractCrudController
 			->setEntityLabelInPlural('Список модулей команд')
 			->setSearchFields(['id', 'name'])
 			->setDefaultSort(['id' => 'ASC'])
-			->setEntityLabelInSingular(function (?TeamShelter $shelter, ?string $pageName) {
+			->setEntityLabelInSingular(function (?UserShelter $shelter, ?string $pageName) {
 				if($pageName == 'new') {
 					return 'модуль';
 				} else if($pageName == 'edit') {
-					return $shelter->getShelter()->getName() . " / " . $shelter->getTeam()->getTeamName();
+					return $shelter->getShelter()->getName() . " / " . $shelter->getUser()->getNickname();
 				}
 			})
 			;
@@ -53,7 +53,7 @@ class TeamShelterCrudController extends AbstractCrudController
 		return [
 			IdField::new('id')->hideOnForm(),
 			BooleanField::new('enabled'),
-			AssociationField::new('team')->setQueryBuilder(function (QueryBuilder $queryBuilder) {
+			AssociationField::new('user')->setQueryBuilder(function (QueryBuilder $queryBuilder) {
 				return $queryBuilder->andWhere('entity.enabled = :enabled')->setParameter('enabled', true);
 			}),
 			AssociationField::new('game')->setQueryBuilder(function(QueryBuilder $queryBuilder) {

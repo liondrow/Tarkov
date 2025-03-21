@@ -32,14 +32,14 @@ class WalletController extends AbstractController
 	{
 		$activeGame = $this->gameService->getCurrentGame();
 		$data = json_decode($request->getContent(), true);
-		$teamTo = $data['teamTo'];
+		$userTo = $data['userTo'];
 		$sum = $data['sum'];
-		if(empty($teamTo) || empty($sum)) {
+		if(empty($userTo) || empty($sum)) {
 			throw new InvalidInvoiceDataException("Не заполнены обязательные поля");
 		}
 		/** @var User $user */
 		$user = $this->getUser();
-		$newWalletValue = $this->walletService->sendInvoice($activeGame, $user, $teamTo, $sum);
+		$newWalletValue = $this->walletService->sendInvoice($activeGame, $user, $userTo, $sum);
 		return new JsonResponse(['newWalletValue' => $newWalletValue]);
 	}
 
@@ -50,9 +50,9 @@ class WalletController extends AbstractController
 	public function getInvoiceHistory(): JsonResponse
 	{
 		$activeGame = $this->gameService->getCurrentGame();
-		/** @var User $team */
-		$team = $this->getUser();
-		$history = $this->walletService->getInvoiceHistoryForGame($activeGame, $team);
+		/** @var User $user */
+		$user = $this->getUser();
+		$history = $this->walletService->getInvoiceHistoryForGame($activeGame, $user);
 		return new JsonResponse($history);
 	}
 
@@ -81,19 +81,19 @@ class WalletController extends AbstractController
 		return new JsonResponse($resWallet->getValue() ?? 0);
     }
 
-	#[Route('wallet_available_teams', name: 'app_teams')]
-	public function availableTeams(): JsonResponse
+	#[Route('wallet_available_users', name: 'app_users')]
+	public function availableUsers(): JsonResponse
 	{
 		$activeGame = $this->gameService->getCurrentGame();
-		$teams = $activeGame->getUsers()->toArray();
-		$resTeams = [];
-		foreach($teams as $team) {
-			if($team == $this->getUser()) {
+		$users = $activeGame->getUsers()->toArray();
+		$resUsers = [];
+		foreach($users as $user) {
+			if($user == $this->getUser()) {
 				continue;
 			}
-			$resTeams[] = $team->getUserIdentifier();
+			$resUsers[] = $user->getUserIdentifier();
 		}
-		return new JsonResponse($resTeams);
+		return new JsonResponse($resUsers);
 	}
 
 }

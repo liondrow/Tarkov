@@ -15,7 +15,7 @@ class UserController extends AbstractController
     {
 		/** @var User $user */
 		$user = $this->getUser();
-		$userData['teamName'] = $user->getTeamName();
+		$userData['nickname'] = $user->getNickname();
 		$userData['uid'] = $user->getUserIdentifier();
         return new JsonResponse($userData);
     }

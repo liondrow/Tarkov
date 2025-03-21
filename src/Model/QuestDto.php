@@ -27,7 +27,7 @@ class QuestDto implements \JsonSerializable
 		$q->setName($quest->getName());
 		$q->setDescription($quest->getDescription());
 		$q->setReward($quest->getReward());
-		$q->setTarget($quest->getTarget()->getTeamName());
+		$q->setTarget($quest->getTarget()->getNickname());
 		return $q;
 	}
 

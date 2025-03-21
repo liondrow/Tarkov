@@ -20,7 +20,7 @@ class QuestProgress
 
     #[ORM\ManyToOne(inversedBy: 'questProgress')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $team = null;
+    private ?User $user = null;
 
     #[ORM\Column(length: 255, nullable: false, enumType: QuestStatus::class)]
     private ?QuestStatus $status = null;
@@ -45,14 +45,14 @@ class QuestProgress
         return $this;
     }
 
-    public function getTeam(): ?User
+    public function getUser(): ?User
     {
-        return $this->team;
+        return $this->user;
     }
 
-    public function setTeam(?User $team): static
+    public function setUser(?User $user): static
     {
-        $this->team = $team;
+        $this->user = $user;
 
         return $this;
     }

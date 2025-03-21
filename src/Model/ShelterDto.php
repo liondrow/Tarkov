@@ -2,7 +2,7 @@
 
 namespace App\Model;
 
-use App\Entity\TeamShelter;
+use App\Entity\UserShelter;
 
 class ShelterDto implements \JsonSerializable
 {
@@ -23,7 +23,7 @@ class ShelterDto implements \JsonSerializable
 		];
 	}
 
-	public static function newFromEntity(TeamShelter $shelter): self
+	public static function newFromEntity(UserShelter $shelter): self
 	{
 		$r = new static;
 		$r->setId($shelter->getId());

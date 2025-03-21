@@ -19,7 +19,7 @@ class Wallet
 
     #[ORM\ManyToOne(inversedBy: 'wallets')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $team = null;
+    private ?User $user = null;
 
     #[ORM\Column(nullable: true)]
     private ?float $value = null;
@@ -41,14 +41,14 @@ class Wallet
         return $this;
     }
 
-    public function getTeam(): ?User
+    public function getUser(): ?User
     {
-        return $this->team;
+        return $this->user;
     }
 
-    public function setTeam(?User $team): static
+    public function setUser(?User $user): static
     {
-        $this->team = $team;
+        $this->user = $user;
 
         return $this;
     }

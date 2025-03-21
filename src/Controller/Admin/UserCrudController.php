@@ -55,8 +55,7 @@ class UserCrudController extends AbstractCrudController
 			->onlyOnForms();
 		$fields[] = $password;
 
-		$fields[] = TextField::new('teamName');
-		$fields[] = ChoiceField::new('side')->setChoices(["BEAR" => "BEAR", "USEC" => "USEC", "WILD" => "WILD"]);
+		$fields[] = TextField::new('userName');
 		$fields[] = TextField::new('airsoftTeam');
 		$fields[] = DateField::new('createdAt');
 		$fields[] = AssociationField::new('questBranch')->hideOnIndex();
