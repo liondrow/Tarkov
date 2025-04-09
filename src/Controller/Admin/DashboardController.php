@@ -3,6 +3,8 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Game;
+use App\Entity\Item;
+use App\Entity\ItemCategory;
 use App\Entity\MarketInvoice;
 use App\Entity\MarketItem;
 use App\Entity\Quest;
@@ -40,14 +42,16 @@ class DashboardController extends AbstractDashboardController
     {
 	    yield MenuItem::linkToRoute('Статистика', 'fa fa-chart-line', 'admin_stats');
         yield MenuItem::linkToCrud('Игроки', 'fas fa-user', User::class);
-        yield MenuItem::linkToCrud('Игры', 'fas fa-list', Game::class);
-        yield MenuItem::linkToCrud('Кошельки', 'fas fa-list', Wallet::class);
-        yield MenuItem::linkToCrud('Барахолка', 'fas fa-list', MarketItem::class);
-        yield MenuItem::linkToCrud('Покупки на барахолке', 'fas fa-list', MarketInvoice::class);
-        yield MenuItem::linkToCrud('Квесты', 'fas fa-list', Quest::class);
+        yield MenuItem::linkToCrud('Игры', 'fas fa-flushed', Game::class);
+        yield MenuItem::linkToCrud('Кошельки', 'fas fa-wallet', Wallet::class);
+        yield MenuItem::linkToCrud('Предметы', 'fas fa-lemon', Item::class);
+        yield MenuItem::linkToCrud('Категории предметов', 'fas fa-list', ItemCategory::class);
+        yield MenuItem::linkToCrud('Барахолка', 'fas fa-toolbox', MarketItem::class);
+        yield MenuItem::linkToCrud('Покупки на барахолке', 'fas fa-handshake', MarketInvoice::class);
+        yield MenuItem::linkToCrud('Квесты', 'fas fa-ticket', Quest::class);
         yield MenuItem::linkToCrud('Ветки квестов', 'fas fa-list', QuestBranch::class);
-        yield MenuItem::linkToCrud('Распределенные квесты', 'fas fa-list', QuestProgress::class);
-        yield MenuItem::linkToCrud('Убежище', 'fas fa-list', Shelter::class);
-        yield MenuItem::linkToCrud('Распределенные модули', 'fas fa-list', UserShelter::class);
+        yield MenuItem::linkToCrud('Распределенные квесты', 'fas fa-thumbtack', QuestProgress::class);
+        yield MenuItem::linkToCrud('Убежище', 'fas fa-warehouse', Shelter::class);
+        yield MenuItem::linkToCrud('Распределенные модули', 'fas fa-wrench', UserShelter::class);
     }
 }
