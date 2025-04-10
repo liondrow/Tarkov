@@ -40,7 +40,10 @@ services:
       XDEBUG_CLIENT_PORT: 9003
       PHP_IDE_CONFIG: 'serverName=tarkov'
     volumes:
-      - .:/var/www/tarkov
+      - type: bind
+        source: .
+        target: /var/www/tarkov
+        consistency: cached
     networks:
       - tarkov
     extra_hosts:
