@@ -3,7 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Game;
+use App\Entity\Shelter;
 use App\Entity\User;
+use App\Entity\UserShelter;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
@@ -64,5 +66,26 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 			->setParameter('username', $username)
 			->setParameter('users', $resUsers)
 			->getOneOrNullResult();
+	}
+
+	public function isUserOpenStashes(Game $game, int $userId): bool
+	{
+		$entityManager = $this->getEntityManager();
+		$result = $entityManager->createQuery(
+			'SELECT u.id
+				FROM App\Entity\UserShelter u
+				JOIN u.shelter s
+				WHERE u.game = :game
+				AND u.user = :userId
+				AND u.enabled = 1
+				AND s.enabled = 1
+				AND s.isOpenStash = 1
+				'
+		)
+			->setParameter('game', $game)
+			->setParameter('userId', $userId)
+			->getOneOrNullResult();
+
+		return $result !== null;
 	}
 }
