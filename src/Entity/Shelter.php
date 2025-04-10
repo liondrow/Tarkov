@@ -36,6 +36,9 @@ class Shelter
     #[ORM\Column(nullable: true)]
     private ?bool $enabled = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $isOpenStash = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -97,6 +100,18 @@ class Shelter
     public function setEnabled(?bool $enabled): static
     {
         $this->enabled = $enabled;
+
+        return $this;
+    }
+
+    public function isOpenStash(): ?bool
+    {
+        return $this->isOpenStash;
+    }
+
+    public function setIsOpenStash(?bool $isOpenStash): static
+    {
+        $this->isOpenStash = $isOpenStash;
 
         return $this;
     }

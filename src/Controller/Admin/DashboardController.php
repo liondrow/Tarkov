@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Game;
 use App\Entity\Item;
 use App\Entity\ItemCategory;
+use App\Entity\MapPoint;
 use App\Entity\MarketInvoice;
 use App\Entity\MarketItem;
 use App\Entity\Quest;
@@ -51,6 +52,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Квесты', 'fas fa-ticket', Quest::class);
         yield MenuItem::linkToCrud('Ветки квестов', 'fas fa-list', QuestBranch::class);
         yield MenuItem::linkToCrud('Распределенные квесты', 'fas fa-thumbtack', QuestProgress::class);
+        yield MenuItem::linkToCrud('Метки карты', 'fas fa-map-marker', MapPoint::class);
         yield MenuItem::linkToCrud('Убежище', 'fas fa-warehouse', Shelter::class);
         yield MenuItem::linkToCrud('Распределенные модули', 'fas fa-wrench', UserShelter::class);
     }
