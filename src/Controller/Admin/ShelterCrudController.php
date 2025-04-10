@@ -58,7 +58,8 @@ class ShelterCrudController extends AbstractCrudController
 				return $queryBuilder->andWhere('entity.enabled = :enabled')->setParameter('enabled', true);
 			}),
 			TextEditorField::new('description'),
-			TextEditorField::new('bonus')
+			TextEditorField::new('bonus'),
+			BooleanField::new('isOpenStash'),
 		];
 	}
 
