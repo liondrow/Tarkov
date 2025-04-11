@@ -82,9 +82,9 @@ class MapPointCrudController extends AbstractCrudController
 		return [
 			IdField::new('id')->hideOnForm(),
 			BooleanField::new('enabled'),
+			TextField::new('name'),
 			TextField::new('latitude'),
 			TextField::new('longitude'),
-			TextField::new('name'),
 			BooleanField::new('isStash'),
 			TextField::new('clipRect')
 		];

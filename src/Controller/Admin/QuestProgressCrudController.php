@@ -12,6 +12,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 
 class QuestProgressCrudController extends AbstractCrudController
 {
@@ -33,7 +34,7 @@ class QuestProgressCrudController extends AbstractCrudController
 	{
 		return $crud
 			->setEntityLabelInPlural('Список распределений')
-			->setSearchFields(['id', 'name'])
+			->setSearchFields(['id', 'user.username', 'quest.name'])
 			->setDefaultSort(['id' => 'ASC'])
 			->setEntityLabelInSingular(function (?QuestProgress $questStatus, ?string $pageName) {
 				if($pageName == 'new') {
@@ -47,8 +48,17 @@ class QuestProgressCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
+	    $adminUrlGenerator = $this->container->get(AdminUrlGenerator::class);
         return [
-            IdField::new('id')->hideOnForm(),
+            IdField::new('id')->formatValue(function ($value, $entity) use ($adminUrlGenerator) {
+	            $url = $adminUrlGenerator
+		            ->setController(self::class)
+		            ->setAction('edit')
+		            ->setEntityId($entity->getId())
+		            ->generateUrl();
+
+	            return sprintf('<a href="%s">%s</a>', $url, $value);
+            })->hideOnForm(),
             ChoiceField::new('status')->setChoices(QuestStatus::cases()),
 	        AssociationField::new('user')->setQueryBuilder(function (QueryBuilder $queryBuilder) {
 		        return $queryBuilder->andWhere('entity.enabled = :enabled')->setParameter('enabled', true);

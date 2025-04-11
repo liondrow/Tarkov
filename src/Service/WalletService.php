@@ -89,7 +89,7 @@ class WalletService
 		{
 			$userTo = $this->entityManager->getRepository(User::class)->findOneBy(['username' => $userToId]);
 			if(empty($userTo)) {
-                throw new InvalidInvoiceDataException("Команда получателя не найдена");
+                throw new InvalidInvoiceDataException("Получатель не найден");
             }
 			$userToWallet = $userTo->getWallets()->filter(function (Wallet $wallet) use ($game) {
 				return $wallet->getGame() === $game;
