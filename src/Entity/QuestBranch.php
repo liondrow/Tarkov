@@ -31,7 +31,7 @@ class QuestBranch
     #[ORM\Column(nullable: true)]
     private ?bool $enabled = null;
 
-    #[ORM\OneToMany(mappedBy: 'branch', targetEntity: Quest::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'branch', targetEntity: Quest::class, cascade: ['remove'], orphanRemoval: true)]
     private Collection $quests;
 
     public function __construct()

@@ -98,7 +98,7 @@ class UserCrudController extends AbstractCrudController
 		$fields[] = $password;
 		$fields[] = TextField::new('airsoftTeam');
 		$fields[] = DateField::new('createdAt');
-		$fields[] = AssociationField::new('questBranch')->hideOnIndex();
+		$fields[] = AssociationField::new('questBranch');
 		$fields[] = BooleanField::new('isPmc')->hideOnIndex();
 		$fields[] = BooleanField::new('seller')->hideOnIndex();
 		$fields[] = BooleanField::new('isAuctioner')->hideOnIndex();

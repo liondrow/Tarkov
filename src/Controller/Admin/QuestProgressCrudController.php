@@ -59,11 +59,11 @@ class QuestProgressCrudController extends AbstractCrudController
 
 	            return sprintf('<a href="%s">%s</a>', $url, $value);
             })->hideOnForm(),
-            ChoiceField::new('status')->setChoices(QuestStatus::cases()),
+	        AssociationField::new('quest'),
 	        AssociationField::new('user')->setQueryBuilder(function (QueryBuilder $queryBuilder) {
 		        return $queryBuilder->andWhere('entity.enabled = :enabled')->setParameter('enabled', true);
 	        }),
-	        AssociationField::new('quest')
+	        ChoiceField::new('status')->setChoices(QuestStatus::cases()),
         ];
     }
 

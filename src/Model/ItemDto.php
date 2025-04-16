@@ -8,9 +8,9 @@ class ItemDto implements \JsonSerializable
 {
 	private int $id;
 	private string $name;
-	private float $praporPrice;
-	private float $terapevtPrice;
-	private float $baraholshikPrice;
+	private ?float $praporPrice;
+	private ?float $terapevtPrice;
+	private ?float $baraholshikPrice;
 
 	public function jsonSerialize(): array
 	{
@@ -44,36 +44,6 @@ class ItemDto implements \JsonSerializable
 		$this->id = $id;
 	}
 
-	public function getPraporPrice(): float
-	{
-		return $this->praporPrice;
-	}
-
-	public function setPraporPrice(float $praporPrice): void
-	{
-		$this->praporPrice = $praporPrice;
-	}
-
-	public function getTerapevtPrice(): float
-	{
-		return $this->terapevtPrice;
-	}
-
-	public function setTerapevtPrice(float $terapevtPrice): void
-	{
-		$this->terapevtPrice = $terapevtPrice;
-	}
-
-	public function getBaraholshikPrice(): float
-	{
-		return $this->baraholshikPrice;
-	}
-
-	public function setBaraholshikPrice(float $baraholshikPrice): void
-	{
-		$this->baraholshikPrice = $baraholshikPrice;
-	}
-
 	public function getName(): string
 	{
 		return $this->name;
@@ -83,6 +53,38 @@ class ItemDto implements \JsonSerializable
 	{
 		$this->name = $name;
 	}
+
+	public function getPraporPrice(): ?float
+	{
+		return $this->praporPrice;
+	}
+
+	public function setPraporPrice(?float $praporPrice): void
+	{
+		$this->praporPrice = $praporPrice;
+	}
+
+	public function getTerapevtPrice(): ?float
+	{
+		return $this->terapevtPrice;
+	}
+
+	public function setTerapevtPrice(?float $terapevtPrice): void
+	{
+		$this->terapevtPrice = $terapevtPrice;
+	}
+
+	public function getBaraholshikPrice(): ?float
+	{
+		return $this->baraholshikPrice;
+	}
+
+	public function setBaraholshikPrice(?float $baraholshikPrice): void
+	{
+		$this->baraholshikPrice = $baraholshikPrice;
+	}
+
+
 
 
 }

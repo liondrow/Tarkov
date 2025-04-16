@@ -13,6 +13,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 
 class QuestCrudController extends AbstractCrudController
 {
@@ -48,9 +49,18 @@ class QuestCrudController extends AbstractCrudController
 
 	public function configureFields(string $pageName): iterable
 	{
+		$adminUrlGenerator = $this->container->get(AdminUrlGenerator::class);
 		return [
 			IdField::new('id')->hideOnForm(),
-			TextField::new('name'),
+			TextField::new('name')->formatValue(function ($value, $entity) use ($adminUrlGenerator) {
+				$url = $adminUrlGenerator
+					->setController(self::class)
+					->setAction('edit')
+					->setEntityId($entity->getId())
+					->generateUrl();
+
+				return sprintf('<a href="%s">%s</a>', $url, $value);
+			}),
 			TextEditorField::new('description'),
 			IntegerField::new('reward'),
 			AssociationField::new('target')->setQueryBuilder(function(QueryBuilder $queryBuilder) {
