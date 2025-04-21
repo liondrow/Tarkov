@@ -101,6 +101,10 @@ class WalletService
                 throw new InvalidInvoiceDataException("Недостаточно средств для перевода");
 			}
 
+			if($sum < 1) {
+				throw new InvalidInvoiceDataException("Введите корректную сумму перевода");
+			}
+
 			$resUserToWallet->setValue((float)$resUserToWallet->getValue() + $sum);
 			$resWallet->setValue((float)$resWallet->getValue() - $sum);
 
